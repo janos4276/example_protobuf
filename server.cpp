@@ -9,10 +9,12 @@ using asio::ip::udp;
 class udp_server
 {
 public:
-    udp_server(asio::io_service& io_service)
+    explicit udp_server(asio::io_service& io_service)
             : m_socket(io_service, udp::endpoint(udp::v4(), 40010))
     {
         start_receive();
+        std::cout << "Buffer size = " << m_recv_buffer.size() << std::endl;
+        std::cout << "Element 100 = " << std::to_string(m_recv_buffer[100]) << std::endl;
     }
 
 private:
@@ -49,8 +51,8 @@ private:
     }
 
     udp::socket m_socket;
-    udp::endpoint m_remote_endpoint;
-    std::array<char, 64000> m_recv_buffer;
+    udp::endpoint m_remote_endpoint{};
+    std::array<char, 64000> m_recv_buffer{};
 };
 
 int main()
